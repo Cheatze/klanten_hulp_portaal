@@ -13,13 +13,25 @@ class Ticket extends Model
     protected $fillable = [
         'title',
         'description',
-        'user_id',
+        'status',
+        'made_by',
+        'assigned_to',
         'category_id',
     ];
 
-    public function user()
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
+
+    public function madeBy()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'made_by');
+    }
+
+    public function assignedTo()
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
     }
 
     public function category()

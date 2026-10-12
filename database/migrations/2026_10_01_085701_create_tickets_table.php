@@ -16,7 +16,15 @@ return new class extends Migration
             $table->timestamps();
             $table->string('title');
             $table->text('description');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->enum('status', ['open', 'closed', 'pending'])->default('open');
+                    $table->foreignId('made_by')
+                  ->constrained('users')
+                  ->onDelete('cascade');
+
+            $table->foreignId('assigned_to')
+                  ->nullable()
+                  ->constrained('users')
+                  ->onDelete('set null');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
         });
     }

@@ -17,10 +17,9 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->enum('status', ['open', 'closed', 'pending'])->default('open');
-                    $table->foreignId('made_by')
+            $table->foreignId('made_by')
                   ->constrained('users')
                   ->onDelete('cascade');
-
             $table->foreignId('assigned_to')
                   ->nullable()
                   ->constrained('users')

@@ -50,7 +50,7 @@ fetchCategories();
 </template>
 <style scoped>
 table {
-    width: 25%;
+    width: 50%;
     border-collapse: collapse;
 }
 

@@ -21,9 +21,14 @@ const ticket = getTicketById(ticketId);
         <p><strong>Description:</strong> {{ ticket.description }}</p>
         <p><strong>Status:</strong> {{ ticket.status }}</p>
         <p>
-            <strong>Assigned user:</strong>
-            {{ getUserById(ticket.user_id).value?.first_name }}
-            {{ getUserById(ticket.user_id).value?.last_name }}
+            <strong>Created by:</strong>
+            {{ getUserById(ticket.made_by).value?.first_name }}
+            {{ getUserById(ticket.made_by).value?.last_name }}
+        </p>
+        <p v-if="ticket.assigned_to">
+            <strong>Assigned to:</strong>
+            {{ getUserById(ticket.assigned_to).value?.first_name }}
+            {{ getUserById(ticket.assigned_to).value?.last_name }}
         </p>
         <p>
             <strong>Category:</strong>

@@ -2,8 +2,17 @@ import axios from "axios";
 import { destroyErrors, destroyMessage } from "../../services/error";
 import { setErrorBag, setMessage } from "../../services/error";
 
-const http = axios.create({
+// const http = axios.create({
+//     baseURL: "/api",
+//     headers: {
+//         "Content-Type": "application/json",
+//     },
+// });
+
+export const http = axios.create({
     baseURL: "/api",
+    withCredentials: true,
+    withXSRFToken: true,
     headers: {
         "Content-Type": "application/json",
     },

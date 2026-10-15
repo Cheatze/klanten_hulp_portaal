@@ -3,12 +3,14 @@ import { ref } from "vue";
 import TicketForm from "../components/TicketForm.vue";
 import { fetchCategories, createTicket, Ticket } from "../store";
 
-const ticket = ref({
+const ticket = ref<Ticket>({
+    id: 0,
     title: "",
     description: "",
     status: "open",
-    user_id: null,
-    category_id: null,
+    made_by: 0,
+    assigned_to: 0,
+    category_id: 0,
 });
 </script>
 <template>

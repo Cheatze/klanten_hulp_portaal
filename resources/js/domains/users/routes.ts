@@ -2,7 +2,8 @@ import Overview from "./pages/overview.vue";
 import Register from "./pages/register.vue";
 import Details from "./pages/details.vue";
 import Login from "./pages/login.vue";
-import Reset from "./pages/reset.vue";
+import ResetRequest from "./pages/ResetRequest.vue";
+import ResetPassword from "./pages/ResetPassword.vue";
 
 export const userRoutes = [
     {
@@ -24,9 +25,15 @@ export const userRoutes = [
         meta: { requiresAuth: true },
     },
     {
-        path: "/users/reset",
-        component: Reset,
-        name: "users.reset",
+        path: "/forgot-password",
+        component: ResetRequest,
+        name: "password.request",
+        meta: { guestOnly: true },
+    },
+    {
+        path: "/password-reset",
+        component: ResetPassword,
+        name: "password.reset",
         meta: { guestOnly: true },
     },
     {

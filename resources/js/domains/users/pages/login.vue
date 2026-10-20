@@ -108,6 +108,13 @@ const handleLogin = async () => {
                         <span v-else>Sign in</span>
                     </button>
                 </div>
+                <div class="text-sm text-center">
+                    <router-link
+                        :to="{ name: 'password.request' }"
+                        class="font-medium text-indigo-600 hover:text-indigo-500"
+                        >Forgot your password?</router-link
+                    >
+                </div>
             </form>
         </div>
     </div>

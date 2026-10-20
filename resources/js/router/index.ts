@@ -20,12 +20,12 @@ router.beforeEach(async (to, from, next) => {
     // 2. Check if route requires authentication
     if (to.meta.requiresAuth && !isAuthenticated.value) {
         // Redirect to login if trying to access a protected page while logged out
-        next({ name: "users.login" });
+        return { name: "users.login" };
     }
     // 3. Check if route is guest-only (like the login page)
     else if (to.meta.guestOnly && isAuthenticated.value) {
         // Redirect to overview if trying to access login while already logged in
-        next({ name: "tickets.overview" });
+        return { name: "tickets.overview" };
     }
     // 4. Otherwise, allow navigation
     else {

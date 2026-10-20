@@ -48,6 +48,11 @@ onMounted(async () => {
                     class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
                     >Login</router-link
                 >
+                <router-link
+                    :to="{ name: 'users.register' }"
+                    class="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
+                    >Register</router-link
+                >
             </template>
             <template v-else>
                 <span class="text-sm text-gray-600"

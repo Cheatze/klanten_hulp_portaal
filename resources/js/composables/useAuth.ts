@@ -37,6 +37,12 @@ export function useAuth() {
         }
     };
 
+    const register = async (credentials: any) => {
+        await http.get("/sanctum/csrf-cookie");
+        await http.post("/register", credentials);
+        await fetchUser(); // Immediately sync user state
+    };
+
     const isAuthenticated = computed(() => !!user.value);
 
     return {
@@ -45,6 +51,7 @@ export function useAuth() {
         fetchUser,
         login,
         logout,
+        register,
         isAuthenticated,
     };
 }

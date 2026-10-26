@@ -2,8 +2,9 @@
 import { ref } from "vue";
 import TicketForm from "../components/TicketForm.vue";
 import { fetchCategories, createTicket, Ticket } from "../store";
+import { useRouter } from "vue-router";
 
-const ticket = ref<Ticket>({
+const ticket = ref<Omit<Ticket, "created_at" | "updated_at">>({
     id: 0,
     title: "",
     description: "",

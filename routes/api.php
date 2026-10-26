@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\RegisteredUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,7 @@ Route::get('/users', [\App\Http\Controllers\UserController::class, 'index']);
 
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
 Route::post('/reset-password', [PasswordResetController::class, 'reset']);
+Route::post('/register', [RegisteredUserController::class, 'store']);
 
 // Protected routes (requires a valid Sanctum session cookie)
 Route::middleware('auth:sanctum')->group(function () {

@@ -1,5 +1,6 @@
 import { ref, computed } from "vue";
 import { getRequest, postRequest, putRequest, deleteRequest } from "../http";
+import { useAuth } from "../../composables/useAuth";
 
 export interface Identifiable {
     id: number;
@@ -28,6 +29,23 @@ export const storeModuleFactory = <T extends Identifiable>(
     const actions = {
         getAll: async (): Promise<void> => {
             const { data } = await getRequest(moduleName);
+            if (!data) return;
+            setters.setAll(data);
+        },
+        getByUser: async (userId: number): Promise<void> => {
+            const { user } = useAuth();
+
+            // If user is admin, fetch all records instead
+            if (user.value?.is_admin) {
+                await actions.getAll();
+                return;
+            }
+
+            // Otherwise, fetch records filtered by user ID
+            // (Adjust the query parameter name like `user_id` to match your Laravel backend filter)
+            const { data } = await getRequest(
+                `${moduleName}?user_id=${userId}`,
+            );
             if (!data) return;
             setters.setAll(data);
         },

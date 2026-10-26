@@ -27,7 +27,7 @@ router.beforeEach(async (to, from, next) => {
         // Redirect to overview if trying to access login while already logged in
         return { name: "tickets.overview" };
     }
-    // 4. Otherwise, allow navigation
+    // // 4. Otherwise, allow navigation
     else {
         next();
     }

@@ -37,7 +37,7 @@ class TicketPolicy
      */
     public function update(User $user, Ticket $ticket): bool
     {
-        return false;
+        return $user->id === $ticket->user_id;
     }
 
     /**
@@ -45,7 +45,7 @@ class TicketPolicy
      */
     public function delete(User $user, Ticket $ticket): bool
     {
-        return false;
+        return $user->id === $ticket->user_id;
     }
 
     /**

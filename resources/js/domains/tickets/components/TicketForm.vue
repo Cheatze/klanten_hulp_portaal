@@ -8,9 +8,13 @@ import FormError from "../../components/FormError.vue";
 fetchCategories();
 fetchUsers();
 
-const props = defineProps<{
-    ticket: Omit<Ticket, "id" | "made_by"> & { id?: number; made_by?: number };
-}>();
+// const props = defineProps<{
+//     ticket: Omit<Ticket, "id" | "made_by"> & { id?: number; made_by?: number };
+// }>();
+
+const props = defineProps({
+    ticket: Object,
+});
 
 const emit = defineEmits(["submit"]);
 
@@ -26,10 +30,12 @@ const handleSubmit = () => {
         <div>
             <label for="title">Title:</label>
             <input type="text" id="title" v-model="form.title" />
+            <FormError name="title" />
         </div>
         <div>
             <label for="description">Description:</label>
             <textarea id="description" v-model="form.description"></textarea>
+            <FormError name="description" />
         </div>
         <div>
             <label for="status">Status:</label>
@@ -38,6 +44,7 @@ const handleSubmit = () => {
                 <option value="pending">Pending</option>
                 <option value="closed">Closed</option>
             </select>
+            <FormError name="status" />
         </div>
         <div>
             <label for="user_id">Assigned to:</label>

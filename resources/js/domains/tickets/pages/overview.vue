@@ -1,13 +1,29 @@
 <script setup lang="ts">
 import {
     fetchTickets,
+    fetchTicketsByUser,
     getAllTickets,
     fetchCategories,
     getCategoryById,
+    formatDate,
 } from "../store";
 import { fetchUsers, getAllUsers, getUserById } from "../../users/store";
+import { useRouter, useRoute } from "vue-router";
+import { useAuth } from "../../../composables/useAuth";
 
-fetchTickets();
+const router = useRouter();
+const route = useRoute();
+const { user } = useAuth();
+
+//Test to see the user id of the logged in user
+//alert("User id: " + user.value?.id);
+
+if (route.query.verified === "1") {
+    alert("Your email has been verified.");
+}
+
+//fetchTickets();
+fetchTicketsByUser(user.value?.id);
 fetchUsers();
 fetchCategories();
 </script>
@@ -23,9 +39,9 @@ fetchCategories();
                 <th>Created By</th>
                 <th>Category</th>
                 <th>Assigned To</th>
-                <!-- <th>Created At</th>
-                <th>Updated At</th> -->
                 <th>Link to details</th>
+                <th>Created At</th>
+                <th>Updated At</th>
             </tr>
             <tr v-for="ticket in getAllTickets" :key="ticket.id">
                 <td>{{ ticket.id }}</td>
@@ -36,14 +52,16 @@ fetchCategories();
                     {{ getUserById(ticket.made_by).value?.first_name }}
                     {{ getUserById(ticket.made_by).value?.last_name }}
                 </td>
-                <td>{{ getCategoryById(ticket.category_id).value?.name }}</td>
+                <td>
+                    {{ getCategoryById(ticket.category_id).value?.name }}
+                </td>
                 <td v-if="ticket.assigned_to">
                     {{ getUserById(ticket.assigned_to).value?.first_name }}
                     {{ getUserById(ticket.assigned_to).value?.last_name }}
                 </td>
                 <td><a :href="`/tickets/${ticket.id}`">View Details</a></td>
-                <!-- <td>{{ ticket.createdAt }}</td> -->
-                <!-- <td>{{ ticket.updatedAt }}</td> -->
+                <td>{{ formatDate(ticket.created_at) }}</td>
+                <td>{{ formatDate(ticket.updated_at) }}</td>
             </tr>
         </thead>
     </table>

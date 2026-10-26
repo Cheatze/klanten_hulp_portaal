@@ -21,12 +21,14 @@ class DatabaseSeeder extends Seeder
             'first_name' => 'Test',
             'last_name' => 'User',
             'email' => 'test@example.com',
+            'telephone' => '123-456-7890',
         ]);
 
         User::factory()->create([
             'first_name' => 'Admin',
             'last_name' => 'User',
             'email' => 'admin@example.com',
+            'telephone' => '987-654-3210',
             'is_admin' => true,
         ]);
 

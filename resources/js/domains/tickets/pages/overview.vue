@@ -59,6 +59,7 @@ fetchCategories();
                     {{ getUserById(ticket.assigned_to).value?.first_name }}
                     {{ getUserById(ticket.assigned_to).value?.last_name }}
                 </td>
+                <td v-else>Unassigned</td>
                 <td><a :href="`/tickets/${ticket.id}`">View Details</a></td>
                 <td>{{ formatDate(ticket.created_at) }}</td>
                 <td>{{ formatDate(ticket.updated_at) }}</td>

@@ -26,7 +26,6 @@ class StoreTicketRequest extends BaseFormRequest
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'status' => ['required', 'string', 'in:open,closed,pending'],
-            'user_id' => ['required', 'integer', 'exists:users,id'],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
         ];
     }

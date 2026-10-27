@@ -17,6 +17,7 @@ class Ticket extends Model
         'made_by',
         'assigned_to',
         'category_id',
+        'made_by',
     ];
 
     // public function user()

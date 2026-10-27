@@ -21,6 +21,9 @@ export const storeModuleFactory = <T extends Identifiable>(
             for (const item of items)
                 state.value[item.id] = Object.freeze(item);
         },
+        setOne: (item: T): void => {
+            state.value[item.id] = Object.freeze(item);
+        },
         deleteByItem: (item: Pick<T, "id">): void => {
             delete state.value[item.id];
         },
@@ -31,6 +34,13 @@ export const storeModuleFactory = <T extends Identifiable>(
             const { data } = await getRequest(moduleName);
             if (!data) return;
             setters.setAll(data);
+        },
+        fetchById: async (id: number): Promise<void> => {
+            const { data } = await getRequest(`${moduleName}/${id}`);
+
+            if (!data) return;
+
+            setters.setOne(data);
         },
         getByUser: async (userId: number): Promise<void> => {
             const { user } = useAuth();
@@ -48,11 +58,16 @@ export const storeModuleFactory = <T extends Identifiable>(
             );
             if (!data) return;
             setters.setAll(data);
-        },
-        create: async (item: Omit<T, "id">): Promise<void> => {
+        }, //added | "made_by" | "created_at" | "updated_at", will this still play nice with comments/reactions?
+        create: async (
+            item: Omit<
+                T,
+                "id" | "made_by" | "created_at" | "updated_at" | "assigned_to"
+            >,
+        ): Promise<void> => {
             const { data } = await postRequest(moduleName, item);
             if (!data) return;
-            setters.setAll(data);
+            setters.setOne(data);
         },
         update: async (id: number, item: Partial<T>): Promise<void> => {
             const { data } = await putRequest(`${moduleName}/${id}`, item);

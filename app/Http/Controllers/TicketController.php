@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Http\Resources\TicketResource;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TicketController extends Controller
 {
@@ -38,9 +39,9 @@ class TicketController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -48,7 +49,25 @@ class TicketController extends Controller
      */
     public function store(StoreTicketRequest $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'status' => [
+                'required',
+                Rule::in(['open', 'pending', 'closed']),
+            ],
+            'category_id' => [
+                'required',
+                'integer',
+                'exists:categories,id',
+            ],
+        ]);
+
+        $validated['made_by'] = $request->user()->id;
+
+        $ticket = Ticket::create($validated);
+
+        return response()->json($ticket, 201);
     }
 
     /**
@@ -56,7 +75,7 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        
+        return response()->json($ticket);
     }
 
     /**

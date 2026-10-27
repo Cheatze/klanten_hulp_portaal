@@ -20,6 +20,7 @@ export const getTicketById = ticketStore.getters.getById;
 
 //actions
 export const fetchTickets = ticketStore.actions.getAll;
+export const fetchById = ticketStore.actions.fetchById;
 export const fetchTicketsByUser = ticketStore.actions.getByUser;
 
 //setters

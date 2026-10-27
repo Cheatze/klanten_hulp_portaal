@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-    fetchTickets,
+    fetchById,
     getTicketById,
     fetchCategories,
     getCategoryById,
@@ -9,7 +9,7 @@ import { fetchUsers, getUserById } from "../../users/store";
 import { useRoute } from "vue-router";
 const route = useRoute();
 const ticketId = Number(route.params.id);
-fetchTickets();
+fetchById(ticketId);
 fetchUsers();
 fetchCategories();
 const ticket = getTicketById(ticketId);

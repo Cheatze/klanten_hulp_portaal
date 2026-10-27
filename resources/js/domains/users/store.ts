@@ -14,4 +14,7 @@ const userStore = storeModuleFactory<User>("users");
 //getters
 export const getAllUsers = userStore.getters.all;
 export const getUserById = userStore.getters.getById;
+
+//actions
 export const fetchUsers = userStore.actions.getAll;
+export const fetchUserById = userStore.actions.fetchById;

@@ -51,4 +51,7 @@ const categoryStore = storeModuleFactory<Category>("categories");
 //getters
 export const getAllCategories = categoryStore.getters.all;
 export const getCategoryById = categoryStore.getters.getById;
+
+//Actions
 export const fetchCategories = categoryStore.actions.getAll;
+export const fetchCatagoryById = categoryStore.actions.fetchById;

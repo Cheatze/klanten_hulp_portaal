@@ -49,19 +49,20 @@ class TicketController extends Controller
      */
     public function store(StoreTicketRequest $request)
     {
-        $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'status' => [
-                'required',
-                Rule::in(['open', 'pending', 'closed']),
-            ],
-            'category_id' => [
-                'required',
-                'integer',
-                'exists:categories,id',
-            ],
-        ]);
+        $validated = $request->validated();
+        // [
+        //     'title' => ['required', 'string', 'max:255'],
+        //     'description' => ['required', 'string'],
+        //     'status' => [
+        //         'required',
+        //         Rule::in(['open', 'pending', 'closed']),
+        //     ],
+        //     'category_id' => [
+        //         'required',
+        //         'integer',
+        //         'exists:categories,id',
+        //     ],
+        // ]);
 
         $validated['made_by'] = $request->user()->id;
 
@@ -81,9 +82,9 @@ class TicketController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Ticket $ticket)
+    public function edit(request $request, Ticket $ticket)
     {
-        //
+        
     }
 
     /**
@@ -91,7 +92,9 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        //
+        $ticket->update($request->validated());
+
+        
     }
 
     /**

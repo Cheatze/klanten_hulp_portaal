@@ -12,6 +12,15 @@ class UpdateTicketRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        //$user = $request->user();
+        $user = $this->user();
+
+        if ($user->is_admin) {
+            return true;
+        } else if($user->id == $this->made_by){
+            return true;
+        }
+
         return false;
     }
 
@@ -23,7 +32,10 @@ class UpdateTicketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'status' => ['required', 'string', 'in:open,closed,pending'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
         ];
     }
 }

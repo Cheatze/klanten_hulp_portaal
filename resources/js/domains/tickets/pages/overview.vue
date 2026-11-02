@@ -40,6 +40,7 @@ fetchCategories();
                 <th>Category</th>
                 <th>Assigned To</th>
                 <th>Link to details</th>
+                <th>Edit ticket</th>
                 <th>Created At</th>
                 <th>Updated At</th>
             </tr>
@@ -61,6 +62,7 @@ fetchCategories();
                 </td>
                 <td v-else>Unassigned</td>
                 <td><a :href="`/tickets/${ticket.id}`">View Details</a></td>
+                <td><a :href="`/tickets/${ticket.id}/edit`">Edit</a></td>
                 <td>{{ formatDate(ticket.created_at) }}</td>
                 <td>{{ formatDate(ticket.updated_at) }}</td>
             </tr>

@@ -72,7 +72,7 @@ export const storeModuleFactory = <T extends Identifiable>(
         update: async (id: number, item: Partial<T>): Promise<void> => {
             const { data } = await putRequest(`${moduleName}/${id}`, item);
             if (!data) return;
-            setters.setAll(data);
+            setters.setOne(data);
         },
         delete: async (id: number): Promise<void> => {
             await deleteRequest(`${moduleName}/${id}`);

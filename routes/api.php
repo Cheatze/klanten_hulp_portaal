@@ -35,6 +35,7 @@ Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/tickets', [TicketController::class, 'store']);
+    Route::put('/tickets/{ticket}', [TicketController::class, 'update']);
     
     Route::get('/user', function (Request $request) {
         return $request->user();

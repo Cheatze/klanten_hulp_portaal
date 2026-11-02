@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch  } from "vue";
 import { fetchCategories, getAllCategories, Ticket } from "../store";
 import { fetchUsers, getAllUsers } from "../../users/store";
 import ErrorMessage from "../..//components/ErrorMessage.vue";
@@ -19,6 +19,16 @@ const props = defineProps({
 const emit = defineEmits(["submit"]);
 
 const form = ref({ ...props.ticket });
+
+watch(
+    () => props.ticket,
+    (newTicket) => {
+        if (newTicket) {
+            form.value = { ...newTicket };
+        }
+    },
+    { immediate: true }
+);
 
 const handleSubmit = () => {
     emit("submit", form.value);
@@ -151,7 +161,7 @@ const handleSubmit = () => {
                 type="submit"
                 class="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-800"
             >
-                Create Ticket
+                Submit
             </button>
         </div>
     </form>

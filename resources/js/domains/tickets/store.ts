@@ -27,11 +27,7 @@ export const fetchTicketsByUser = ticketStore.actions.getByUser;
 export const createTicket = ticketStore.actions.create;
 export const updateTicket = ticketStore.actions.update;
 export const deleteTicket = ticketStore.actions.delete;
-
-export type Category = {
-    id: number;
-    name: string;
-};
+export const patchTicket = ticketStore.actions.patch;
 
 //in een helpers map zetten, zodat het overal gebruikt kan worden.
 export const formatDate = (dateString: string) => {
@@ -46,12 +42,17 @@ export const formatDate = (dateString: string) => {
     });
 };
 
-const categoryStore = storeModuleFactory<Category>("categories");
+// export type Category = {
+//     id: number;
+//     name: string;
+// };
 
-//getters
-export const getAllCategories = categoryStore.getters.all;
-export const getCategoryById = categoryStore.getters.getById;
+// const categoryStore = storeModuleFactory<Category>("categories");
 
-//Actions
-export const fetchCategories = categoryStore.actions.getAll;
-export const fetchCatagoryById = categoryStore.actions.fetchById;
+// //getters
+// export const getAllCategories = categoryStore.getters.all;
+// export const getCategoryById = categoryStore.getters.getById;
+
+// //Actions
+// export const fetchCategories = categoryStore.actions.getAll;
+// export const fetchCatagoryById = categoryStore.actions.fetchById;

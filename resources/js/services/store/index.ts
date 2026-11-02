@@ -1,5 +1,11 @@
 import { ref, computed } from "vue";
-import { getRequest, postRequest, putRequest, deleteRequest } from "../http";
+import {
+    getRequest,
+    postRequest,
+    putRequest,
+    deleteRequest,
+    patchRequest,
+} from "../http";
 import { useAuth } from "../../composables/useAuth";
 
 export interface Identifiable {
@@ -71,6 +77,11 @@ export const storeModuleFactory = <T extends Identifiable>(
         },
         update: async (id: number, item: Partial<T>): Promise<void> => {
             const { data } = await putRequest(`${moduleName}/${id}`, item);
+            if (!data) return;
+            setters.setOne(data);
+        },
+        patch: async (id: number, item: Partial<T>): Promise<void> => {
+            const { data } = await patchRequest(`${moduleName}/${id}`, item);
             if (!data) return;
             setters.setOne(data);
         },

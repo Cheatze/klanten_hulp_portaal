@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, watch  } from "vue";
-import { fetchCategories, getAllCategories, Ticket } from "../store";
+import { ref, watch } from "vue";
+import { fetchCategories, getAllCategories } from "../../categories/store";
+import { Ticket } from "../store";
 import { fetchUsers, getAllUsers } from "../../users/store";
 import ErrorMessage from "../..//components/ErrorMessage.vue";
 import FormError from "../../components/FormError.vue";
@@ -27,7 +28,7 @@ watch(
             form.value = { ...newTicket };
         }
     },
-    { immediate: true }
+    { immediate: true },
 );
 
 const handleSubmit = () => {

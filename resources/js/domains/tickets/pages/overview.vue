@@ -3,10 +3,9 @@ import {
     fetchTickets,
     fetchTicketsByUser,
     getAllTickets,
-    fetchCategories,
-    getCategoryById,
     formatDate,
 } from "../store";
+import { fetchCategories, getCategoryById } from "../../categories/store";
 import { fetchUsers, getAllUsers, getUserById } from "../../users/store";
 import { useRouter, useRoute } from "vue-router";
 import { useAuth } from "../../../composables/useAuth";

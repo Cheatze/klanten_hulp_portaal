@@ -43,4 +43,6 @@ export const postRequest = (endpoint: string, data: unknown) =>
     http.post(endpoint, data);
 export const putRequest = (endpoint: string, data: unknown) =>
     http.put(endpoint, data);
+export const patchRequest = (endpoint: string, data: unknown) =>
+    http.patch(endpoint, data);
 export const deleteRequest = (endpoint: string) => http.delete(endpoint);

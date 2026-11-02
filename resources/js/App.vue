@@ -39,6 +39,13 @@ onMounted(async () => {
                     >Create Ticket</router-link
                 >
             </template>
+            <temlate v-if="user.is_admin">
+                <router-link
+                    :to="{ name: 'categories.overview' }"
+                    class="text-gray-700 hover:text-indigo-600"
+                    >Categories</router-link
+                >
+            </temlate>
         </div>
 
         <div class="flex items-center space-x-4">

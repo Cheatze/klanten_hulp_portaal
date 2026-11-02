@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AssignTicketRequest;
 use App\Models\Ticket;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
@@ -95,6 +96,21 @@ class TicketController extends Controller
         $ticket->update($request->validated());
 
         
+    }
+
+    /**
+     * Assign a ticket to a user.
+     */
+    public function assignTicket(AssignTicketRequest $request, Ticket $ticket)
+    {
+        // $request->validate([
+        //     'assigned_to' => ['required', 'integer', 'exists:users,id'],
+        // ]);
+
+        $ticket->assigned_to = $request->input('assigned_to');
+        $ticket->save();
+
+        return response()->json($ticket);
     }
 
     /**

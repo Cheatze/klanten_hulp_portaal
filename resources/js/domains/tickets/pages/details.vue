@@ -1,50 +1,41 @@
 <script setup lang="ts">
-import {
-    fetchById,
-    getTicketById,
-    fetchCategories,
-    getCategoryById,
-} from "../store";
-import { fetchUsers, getUserById } from "../../users/store";
+import { ref, computed } from "vue";
+import { fetchCategories, getCategoryById } from "../../categories/store";
+import { fetchById, getTicketById, patchTicket, formatDate } from "../store";
+import { fetchUsers, getUserById, getAllUsers } from "../../users/store";
 import { useRoute } from "vue-router";
+import { useAuth } from "../../../composables/useAuth";
+
 const route = useRoute();
 const ticketId = Number(route.params.id);
+const { user } = useAuth();
+
 fetchById(ticketId);
 fetchUsers();
 fetchCategories();
+
 const ticket = getTicketById(ticketId);
+
+// Assign form state
+const showAssignForm = ref(false);
+const selectedAdminId = ref<number | null>(null);
+const isSubmitting = ref(false);
+
+const admins = computed(() => getAllUsers.value.filter((u) => u.is_admin));
+
+const assignTicket = async () => {
+    if (!selectedAdminId.value) return;
+
+    isSubmitting.value = true;
+    try {
+        await patchTicket(ticketId, { assigned_to: selectedAdminId.value });
+        showAssignForm.value = false;
+        selectedAdminId.value = null;
+    } finally {
+        isSubmitting.value = false;
+    }
+};
 </script>
-<!-- <template>
-    <h2 class="text-2xl font-bold mb-4">Ticket Details</h2>
-    <div v-if="ticket">
-        <h1><strong>Title:</strong> {{ ticket.title }}</h1>
-        <p><strong>Description:</strong> {{ ticket.description }}</p>
-        <p><strong>Status:</strong> {{ ticket.status }}</p>
-        <p>
-            <strong>Created by:</strong>
-            {{ getUserById(ticket.made_by).value?.first_name }}
-            {{ getUserById(ticket.made_by).value?.last_name }}
-        </p>
-        <p v-if="ticket.assigned_to">
-            <strong>Assigned to:</strong>
-            {{ getUserById(ticket.assigned_to).value?.first_name }}
-            {{ getUserById(ticket.assigned_to).value?.last_name }}
-        </p>
-        <p>
-            <strong>Category:</strong>
-            {{ getCategoryById(ticket.category_id).value?.name }}
-        </p>
-    </div>
-</template>
-<style scoped>
-div {
-    margin-bottom: 1rem;
-    margin-left: 1rem;
-}
-p {
-    margin: 0.5rem 0;
-}
-</style> -->
 <template>
     <main class="min-h-screen bg-gray-50 px-4 py-10 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-3xl">
@@ -98,7 +89,69 @@ p {
                         >
                             {{ ticket.status }}
                         </span>
+                        <template v-if="user?.is_admin">
+                            <button
+                                v-if="!showAssignForm"
+                                @click="showAssignForm = true"
+                                class="ml-4 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            >
+                                Assign Ticket
+                            </button>
+                        </template>
                     </div>
+                </div>
+
+                <div
+                    v-if="showAssignForm && user?.is_admin"
+                    class="border-b border-gray-200 bg-gray-50 px-6 py-4 sm:px-8"
+                >
+                    <form
+                        @submit.prevent="assignTicket"
+                        class="flex flex-col gap-3 sm:flex-row sm:items-end"
+                    >
+                        <div class="flex-1">
+                            <label
+                                for="assign_to"
+                                class="mb-1 block text-sm font-medium text-gray-700"
+                            >
+                                Assign to admin
+                            </label>
+                            <select
+                                id="assign_to"
+                                v-model="selectedAdminId"
+                                required
+                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                            >
+                                <option :value="null" disabled>
+                                    Select an admin
+                                </option>
+                                <option
+                                    v-for="admin in admins"
+                                    :key="admin.id"
+                                    :value="admin.id"
+                                >
+                                    {{ admin.first_name }} {{ admin.last_name }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button
+                                type="submit"
+                                :disabled="isSubmitting || !selectedAdminId"
+                                class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                {{ isSubmitting ? "Saving…" : "Save" }}
+                            </button>
+                            <button
+                                type="button"
+                                @click="showAssignForm = false"
+                                class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
                 <div class="space-y-8 px-6 py-6 sm:px-8">
@@ -148,7 +201,7 @@ p {
                                 </dt>
                                 <dd class="mt-1 font-medium text-gray-900">
                                     {{
-                                        getUserById(ticket.assigned_to)?.value
+                                        getUserById(ticket.assigned_to).value
                                             .first_name
                                     }}
                                     {{
@@ -173,7 +226,7 @@ p {
                                     Created at
                                 </dt>
                                 <dd class="mt-1 font-medium text-gray-900">
-                                    {{ ticket.created_at }}
+                                    {{ formatDate(ticket.created_at) }}
                                 </dd>
                             </div>
                         </dl>

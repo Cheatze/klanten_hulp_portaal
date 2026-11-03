@@ -1,24 +1,24 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRoute, useRouter } from "vue-router";
+import CategoryForm from "../components/CategoryForm.vue";
+import { ref } from "vue";
+import { createCategory, Category } from "../store";
+
+const category = ref<Omit<Category, "id" | "created_at" | "updated_at">>({
+    name: "",
+});
+
+const route = useRoute();
+const router = useRouter();
+
+const handleSubmit = async (
+    data: Omit<Category, "id" | "created_at" | "updated_at">,
+) => {
+    await createCategory(data);
+    router.push({ name: "categories.overview" });
+};
+</script>
 <template>
-    <main class="min-h-screen bg-gray-50 px-4 py-10 sm:px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl">
-            <div class="mb-8">
-                <p
-                    class="text-sm font-semibold uppercase tracking-wide text-blue-600"
-                >
-                    Support
-                </p>
-
-                <h1
-                    class="mt-2 text-3xl font-bold tracking-tight text-gray-900"
-                >
-                    Create a category
-                </h1>
-
-                <p class="mt-2 text-sm text-gray-600">
-                    Fill in the details below to create a new category.
-                </p>
-            </div>
-        </div>
-    </main>
+    <h1>Create Category</h1>
+    <CategoryForm :category="category" @submit="handleSubmit" />
 </template>

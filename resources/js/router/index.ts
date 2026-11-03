@@ -11,7 +11,7 @@ export const router = createRouter({
 
 // Global Navigation Guard
 router.beforeEach(async (to, from, next) => {
-    const { isFetched, fetchUser, isAuthenticated } = useAuth();
+    const { isFetched, fetchUser, isAuthenticated, isAdmin } = useAuth();
 
     // 1. If the app just loaded or was refreshed, verify auth state from Laravel session
     if (!isFetched.value) {
@@ -27,8 +27,12 @@ router.beforeEach(async (to, from, next) => {
     else if (to.meta.guestOnly && isAuthenticated.value) {
         // Redirect to overview if trying to access login while already logged in
         return { name: "tickets.overview" };
+        //
+    } else if (to.meta.requiresAdmin && !isAdmin.value) {
+        // Redirect to overview if trying to access admin page while not an admin
+        return { name: "tickets.overview" };
     }
-    // // 4. Otherwise, allow navigation
+    // // 5. Otherwise, allow navigation
     else {
         next();
     }

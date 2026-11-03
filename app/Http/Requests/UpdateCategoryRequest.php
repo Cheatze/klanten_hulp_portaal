@@ -12,7 +12,13 @@ class UpdateCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $user = $this->user();
+
+        if ($user->is_admin) {
+            return true;
+        } else{
+            return false;
+        }
     }
 
     /**
@@ -23,7 +29,7 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
         ];
     }
 }

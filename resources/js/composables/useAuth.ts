@@ -45,6 +45,8 @@ export function useAuth() {
 
     const isAuthenticated = computed(() => !!user.value);
 
+    const isAdmin = computed(() => user.value?.is_admin ?? false);
+
     return {
         user,
         isFetched,
@@ -53,5 +55,6 @@ export function useAuth() {
         logout,
         register,
         isAuthenticated,
+        isAdmin,
     };
 }

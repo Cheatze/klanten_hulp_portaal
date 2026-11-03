@@ -11,6 +11,11 @@ const categoryStore = storeModuleFactory<Category>("categories");
 export const getAllCategories = categoryStore.getters.all;
 export const getCategoryById = categoryStore.getters.getById;
 
+//setters
+export const createCategory = categoryStore.actions.create;
+export const patchCategory = categoryStore.actions.patch;
+export const deleteCategory = categoryStore.actions.delete;
+
 //Actions
 export const fetchCategories = categoryStore.actions.getAll;
 export const fetchCategoryById = categoryStore.actions.fetchById;

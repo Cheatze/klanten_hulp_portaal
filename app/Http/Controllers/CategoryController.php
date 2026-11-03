@@ -30,7 +30,9 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $category = Category::create($validated);
+        return response()->json($category, 201);
     }
 
     /**
@@ -54,7 +56,8 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $category->update($request->validated());
+        return response()->json($category);
     }
 
     /**
@@ -62,6 +65,10 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        if ($category->tickets()->exists()) {
+            return response()->json(['error' => 'Cannot delete category with associated tickets.'], 400);
+        }
+        $category->delete();
+        return response()->json(['message' => 'Category deleted successfully.']);
     }
 }

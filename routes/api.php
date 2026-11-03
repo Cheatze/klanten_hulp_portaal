@@ -6,6 +6,7 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckAdminStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,7 +38,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tickets', [TicketController::class, 'store']);
     Route::put('/tickets/{ticket}', [TicketController::class, 'update']);
     Route::patch('/tickets/{ticket}', [TicketController::class, 'assignTicket']);
-    
+
+    Route::middleware(CheckAdminStatus::class)->group(function () {
+        Route::post('/categories', [CategoryController::class, 'store']);
+        Route::patch('/categories/{category}', [CategoryController::class, 'update']);
+        Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
+    });
+
     Route::get('/user', function (Request $request) {
         return $request->user();
     });

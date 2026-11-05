@@ -42,6 +42,28 @@ export const formatDate = (dateString: string) => {
     });
 };
 
+export type Response = {
+    id: number;
+    ticket_id: number;
+    content: string;
+    user_id: number;
+    created_at: string;
+};
+
+const responseStore = storeModuleFactory<Response>("responses");
+
+//getters
+export const getAllResponses = responseStore.getters.all;
+export const getResponseById = responseStore.getters.getById;
+
+//actions
+export const fetchResponses = responseStore.actions.getAll;
+
+//setters
+export const createResponse = responseStore.actions.create;
+export const updateResponse = responseStore.actions.update;
+export const deleteResponse = responseStore.actions.delete;
+
 // export type Category = {
 //     id: number;
 //     name: string;

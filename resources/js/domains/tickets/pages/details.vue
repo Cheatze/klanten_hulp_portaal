@@ -1,25 +1,43 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { fetchCategories, getCategoryById } from "../../categories/store";
-import { fetchById, getTicketById, patchTicket, formatDate } from "../store";
+import {
+    fetchById,
+    getTicketById,
+    patchTicket,
+    formatDate,
+    fetchResponses,
+    getAllResponses,
+} from "../store";
 import { fetchUsers, getUserById, getAllUsers } from "../../users/store";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useAuth } from "../../../composables/useAuth";
 
 const route = useRoute();
+const router = useRouter();
 const ticketId = Number(route.params.id);
 const { user } = useAuth();
 
 fetchById(ticketId);
+fetchResponses();
 fetchUsers();
 fetchCategories();
 
-const ticket = getTicketById(ticketId);
+const responses = computed(() =>
+    getAllResponses.value.filter((r) => r.ticket_id === ticketId),
+);
+
+let ticket = getTicketById(ticketId);
 
 // Assign form state
 const showAssignForm = ref(false);
 const selectedAdminId = ref<number | null>(null);
 const isSubmitting = ref(false);
+
+//Change status form state
+const showChangeStatusForm = ref(false);
+const selectedStatus = ref<"open" | "closed" | "pending" | null>(null);
+const isStatusSubmitting = ref(false);
 
 const admins = computed(() => getAllUsers.value.filter((u) => u.is_admin));
 
@@ -34,6 +52,23 @@ const assignTicket = async () => {
     } finally {
         isSubmitting.value = false;
     }
+    await fetchById(ticketId);
+    ticket = getTicketById(ticketId);
+};
+
+const handleChangeStatus = async () => {
+    if (!selectedStatus.value) return;
+
+    isStatusSubmitting.value = true;
+    try {
+        await patchTicket(ticketId, { status: selectedStatus.value });
+        showChangeStatusForm.value = false;
+        selectedStatus.value = null;
+    } finally {
+        isStatusSubmitting.value = false;
+    }
+    await fetchById(ticketId);
+    ticket = getTicketById(ticketId);
 };
 </script>
 <template>
@@ -97,6 +132,12 @@ const assignTicket = async () => {
                             >
                                 Assign Ticket
                             </button>
+                            <button
+                                @click="showChangeStatusForm = true"
+                                class="ml-4 rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+                            >
+                                Change Status
+                            </button>
                         </template>
                     </div>
                 </div>
@@ -146,6 +187,56 @@ const assignTicket = async () => {
                             <button
                                 type="button"
                                 @click="showAssignForm = false"
+                                class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div
+                    v-if="showChangeStatusForm && user?.is_admin"
+                    class="border-b border-gray-200 bg-gray-50 px-6 py-4 sm:px-8"
+                >
+                    <form
+                        @submit.prevent="handleChangeStatus"
+                        class="flex flex-col gap-3 sm:flex-row sm:items-end"
+                    >
+                        <div class="flex-1">
+                            <label
+                                for="ChangeStatus"
+                                class="mb-1 block text-sm font-medium text-gray-700"
+                            >
+                                Change Status
+                            </label>
+                            <select
+                                id="ChangeStatus"
+                                v-model="selectedStatus"
+                                required
+                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                            >
+                                <option value="null" disabled>
+                                    Select a status
+                                </option>
+                                <option value="open">Open</option>
+                                <option value="pending">Pending</option>
+                                <option value="closed">Closed</option>
+                            </select>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button
+                                type="submit"
+                                :disabled="
+                                    isStatusSubmitting || !selectedStatus
+                                "
+                                class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                {{ isStatusSubmitting ? "Saving…" : "Save" }}
+                            </button>
+                            <button
+                                type="button"
+                                @click="showChangeStatusForm = false"
                                 class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                             >
                                 Cancel
@@ -243,6 +334,30 @@ const assignTicket = async () => {
                 </h2>
                 <p class="mt-2 text-sm text-gray-500">
                     This ticket may no longer exist or may be unavailable.
+                </p>
+            </div>
+            <div class="mt-8">
+                <h2 class="text-lg font-semibold text-gray-900">Responses</h2>
+                <div v-if="responses.length > 0" class="mt-4 space-y-4">
+                    <div
+                        v-for="response in responses"
+                        :key="response.id"
+                        class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+                    >
+                        <p class="text-sm text-gray-500">
+                            {{ formatDate(response.created_at) }} by
+                            {{
+                                getUserById(response.user_id)?.value.first_name
+                            }}
+                            {{ getUserById(response.user_id)?.value.last_name }}
+                        </p>
+                        <p class="mt-2 text-sm leading-7 text-gray-700">
+                            {{ response.content }}
+                        </p>
+                    </div>
+                </div>
+                <p v-else class="mt-4 text-sm text-gray-500">
+                    No responses yet.
                 </p>
             </div>
         </div>

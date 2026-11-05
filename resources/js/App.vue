@@ -38,7 +38,7 @@ onMounted(async () => {
                     class="text-gray-700 hover:text-indigo-600"
                     >Create Ticket</router-link
                 >
-                <temlate v-if="user.is_admin">
+                <template v-if="user.is_admin">
                     <router-link
                         :to="{ name: 'categories.overview' }"
                         class="text-gray-700 hover:text-indigo-600 padding-right-4"
@@ -49,7 +49,7 @@ onMounted(async () => {
                         class="text-gray-700 hover:text-indigo-600 margin-left-4"
                         >Create Category</router-link
                     >
-                </temlate>
+                </template>
             </template>
         </div>
 

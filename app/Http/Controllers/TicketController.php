@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdminUpdateTicketRequest;
 use App\Http\Requests\AssignTicketRequest;
+use App\Http\Requests\ChangeTicketStatusRequest;
+use App\Http\Requests\PatchTicketRequest;
 use App\Models\Ticket;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
@@ -94,8 +97,25 @@ class TicketController extends Controller
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
         $ticket->update($request->validated());
-
         
+    }
+
+    public function patchTicket(PatchTicketRequest $request, Ticket $ticket)
+    {
+        $ticket->update($request->only(['status', 'assigned_to']));
+
+    }
+
+    public function changeStatus(Request $request, Ticket $ticket)
+    {
+        $request->validate([
+            'status' => ['required', Rule::in(['open', 'pending', 'closed'])],
+        ]);
+
+        $ticket->status = $request->input('status');
+        $ticket->save();
+
+        return response()->json($ticket);
     }
 
     /**

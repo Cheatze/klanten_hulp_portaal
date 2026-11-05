@@ -23,7 +23,7 @@ Route::post('user/login', [AuthController::class, 'login']);
 
 Route::get('/tickets', [TicketController::class, 'index']);
 Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
-Route::get('/tickets/{ticket}/responses', [ResponseController::class, 'index']);
+Route::get('/responses', [ResponseController::class, 'index']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
 
@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/categories', [CategoryController::class, 'store']);
         Route::patch('/categories/{category}', [CategoryController::class, 'update']);
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
+        Route::post('/responses', [ResponseController::class, 'store']);
     });
 
     Route::get('/user', function (Request $request) {

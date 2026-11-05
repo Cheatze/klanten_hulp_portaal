@@ -22,7 +22,7 @@ class ResponseController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -30,7 +30,9 @@ class ResponseController extends Controller
      */
     public function store(StoreResponseRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $response = Response::create($validated);
+        return response()->json($response, 201);
     }
 
     /**

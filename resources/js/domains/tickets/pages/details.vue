@@ -8,10 +8,12 @@ import {
     formatDate,
     fetchResponses,
     getAllResponses,
+    createResponse,
 } from "../store";
 import { fetchUsers, getUserById, getAllUsers } from "../../users/store";
 import { useRoute, useRouter } from "vue-router";
 import { useAuth } from "../../../composables/useAuth";
+import ResponseForm from "../components/ResponseForm.vue";
 
 const route = useRoute();
 const router = useRouter();

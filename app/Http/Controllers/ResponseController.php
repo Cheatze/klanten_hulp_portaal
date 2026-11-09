@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Response;
 use App\Http\Requests\StoreResponseRequest;
 use App\Http\Requests\UpdateResponseRequest;
+use App\Http\Resources\ResponseResource;
+use App\Notifications\ResponseCreatedNotification;
 
 class ResponseController extends Controller
 {
@@ -13,8 +15,9 @@ class ResponseController extends Controller
      */
     public function index()
     {
-        $responses = Response::all();
-        return response()->json($responses);
+        // $responses = Response::all();
+        // return response()->json($responses);
+        return ResponseResource::collection(Response::all());
     }
 
     /**
@@ -30,9 +33,17 @@ class ResponseController extends Controller
      */
     public function store(StoreResponseRequest $request)
     {
-        $validated = $request->validated();
-        $response = Response::create($validated);
-        return response()->json($response, 201);
+        $response = Response::create($request->validated());
+
+        // Load relationships so the notification has access to them
+        $response->load(['user', 'ticket']);
+
+        // Notify the user whose id matches response->user_id
+        $response->user->notify(new ResponseCreatedNotification($response));
+
+        return (new ResponseResource($response))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**

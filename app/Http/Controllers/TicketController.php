@@ -72,7 +72,10 @@ class TicketController extends Controller
 
         $ticket = Ticket::create($validated);
 
-        return response()->json($ticket, 201);
+        //return response()->json($ticket, 201);
+        return (new TicketResource($ticket))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**

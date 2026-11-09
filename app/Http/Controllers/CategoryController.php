@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Resources\CategoryResource;
 
 class CategoryController extends Controller
 {
@@ -13,8 +14,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return response()->json($categories);
+        // $categories = Category::all();
+        // return response()->json($categories);
+        return CategoryResource::collection(Category::all());
     }
 
     /**
@@ -30,9 +32,10 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        $validated = $request->validated();
-        $category = Category::create($validated);
-        return response()->json($category, 201);
+        // $validated = $request->validated();
+        // $category = Category::create($validated);
+        // return response()->json($category, 201);
+        return response()->json(Category::create($request->validated()), 201);
     }
 
     /**
@@ -40,7 +43,8 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return response()->json($category);
+        //return response()->json($category);
+        return new CategoryResource($category);
     }
 
     /**
@@ -57,7 +61,8 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         $category->update($request->validated());
-        return response()->json($category);
+        // return response()->json($category);
+        return new CategoryResource($category);
     }
 
     /**

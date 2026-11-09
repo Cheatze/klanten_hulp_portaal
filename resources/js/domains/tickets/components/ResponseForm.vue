@@ -5,8 +5,12 @@ import FormError from "../../components/FormError.vue";
 
 //const responseText = ref("");
 
+// const props = defineProps<{
+//     response?: Response;
+// }>();
+
 const props = defineProps<{
-    response?: Response;
+    response?: Omit<Response, "id" | "created_at" | "updated_at">;
 }>();
 
 const emit = defineEmits(["submit"]);
@@ -15,6 +19,7 @@ const form = ref({ ...props.response });
 
 const handleSubmit = () => {
     emit("submit", form.value);
+    form.value.content = ""; // Clear the response form after submission
 };
 </script>
 <template>

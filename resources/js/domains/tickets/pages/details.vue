@@ -9,6 +9,7 @@ import {
     fetchResponses,
     getAllResponses,
     createResponse,
+    Response,
 } from "../store";
 import { fetchUsers, getUserById, getAllUsers } from "../../users/store";
 import { useRoute, useRouter } from "vue-router";
@@ -30,6 +31,13 @@ const responses = computed(() =>
 );
 
 let ticket = getTicketById(ticketId);
+
+const response = ref<Omit<Response, "id" | "created_at" | "updated_at">>({
+    content: "",
+    ticket_id: ticket.value?.id || ticketId,
+    user_id: user.value?.id || 0,
+});
+//const response = ref(Response);
 
 // Assign form state
 const showAssignForm = ref(false);
@@ -71,6 +79,13 @@ const handleChangeStatus = async () => {
     }
     await fetchById(ticketId);
     ticket = getTicketById(ticketId);
+};
+
+const handleSubmit = async (
+    data: Omit<Response, "id" | "created_at" | "updated_at">,
+) => {
+    await createResponse(data);
+    await fetchResponses(); // Refresh the list of responses
 };
 </script>
 <template>
@@ -339,29 +354,32 @@ const handleChangeStatus = async () => {
                 </p>
             </div>
             <div class="mt-8">
-                <h2 class="text-lg font-semibold text-gray-900">Responses</h2>
-                <div v-if="responses.length > 0" class="mt-4 space-y-4">
-                    <div
-                        v-for="response in responses"
-                        :key="response.id"
-                        class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
-                    >
-                        <p class="text-sm text-gray-500">
-                            {{ formatDate(response.created_at) }} by
-                            {{
-                                getUserById(response.user_id)?.value.first_name
-                            }}
-                            {{ getUserById(response.user_id)?.value.last_name }}
-                        </p>
-                        <p class="mt-2 text-sm leading-7 text-gray-700">
-                            {{ response.content }}
-                        </p>
-                    </div>
+                <div v-if="user.is_admin" class="mb-6">
+                    <h2 class="text-lg font-semibold text-gray-900">
+                        Add a response
+                    </h2>
+                    <ResponseForm :response="response" @submit="handleSubmit" />
                 </div>
-                <p v-else class="mt-4 text-sm text-gray-500">
-                    No responses yet.
-                </p>
             </div>
+            <h2 class="text-lg font-semibold text-gray-900">Responses</h2>
+            <div v-if="responses.length > 0" class="mt-4 space-y-4">
+                <div
+                    v-for="response in responses"
+                    :key="response.id"
+                    class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+                >
+                    <p class="text-sm text-gray-500">
+                        {{ formatDate(response.created_at) }} by
+                        {{ getUserById(response.user_id)?.value.first_name }}
+                        {{ getUserById(response.user_id)?.value.last_name }}
+                    </p>
+                    <p class="mt-2 text-sm leading-7 text-gray-700">
+                        {{ response.content }}
+                    </p>
+                </div>
+            </div>
+            <p v-else class="mt-4 text-sm text-gray-500">No responses yet.</p>
         </div>
+        <!-- </div> -->
     </main>
 </template>

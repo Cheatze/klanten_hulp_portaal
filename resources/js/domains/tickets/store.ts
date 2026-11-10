@@ -62,6 +62,7 @@ export const fetchResponses = responseStore.actions.getAll;
 //setters
 export const createResponse = responseStore.actions.create;
 export const updateResponse = responseStore.actions.update;
+export const patchResponse = responseStore.actions.patch;
 export const deleteResponse = responseStore.actions.delete;
 
 // export type Category = {

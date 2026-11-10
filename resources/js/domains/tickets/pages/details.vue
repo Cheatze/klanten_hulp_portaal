@@ -10,6 +10,7 @@ import {
     getAllResponses,
     createResponse,
     Response,
+    patchResponse,
 } from "../store";
 import { fetchUsers, getUserById, getAllUsers } from "../../users/store";
 import { useRoute, useRouter } from "vue-router";
@@ -51,6 +52,27 @@ const isStatusSubmitting = ref(false);
 
 const admins = computed(() => getAllUsers.value.filter((u) => u.is_admin));
 
+//Edit
+const editingResponseId = ref<number | null>(null);
+
+const startEditResponse = (r: Response) => {
+    editingResponseId.value = r.id;
+    response.value = {
+        content: r.content,
+        ticket_id: r.ticket_id,
+        user_id: r.user_id,
+    };
+};
+
+const cancelEditResponse = () => {
+    editingResponseId.value = null;
+    response.value = {
+        content: "",
+        ticket_id: ticket.value?.id || ticketId,
+        user_id: user.value?.id || 0,
+    };
+};
+
 const assignTicket = async () => {
     if (!selectedAdminId.value) return;
 
@@ -84,8 +106,13 @@ const handleChangeStatus = async () => {
 const handleSubmit = async (
     data: Omit<Response, "id" | "created_at" | "updated_at">,
 ) => {
-    await createResponse(data);
-    await fetchResponses(); // Refresh the list of responses
+    if (editingResponseId.value !== null) {
+        await patchResponse(editingResponseId.value, data);
+        cancelEditResponse(); // reset form back to "new response" mode
+    } else {
+        await createResponse(data);
+    }
+    await fetchResponses();
 };
 </script>
 <template>
@@ -293,12 +320,12 @@ const handleSubmit = async (
                                 </dt>
                                 <dd class="mt-1 font-medium text-gray-900">
                                     {{
-                                        getUserById(ticket.made_by)?.value
-                                            .first_name
+                                        getUserById(ticket.made_by).value
+                                            ?.first_name
                                     }}
                                     {{
-                                        getUserById(ticket.made_by)?.value
-                                            .last_name
+                                        getUserById(ticket.made_by).value
+                                            ?.last_name
                                     }}
                                 </dd>
                             </div>
@@ -310,11 +337,11 @@ const handleSubmit = async (
                                 <dd class="mt-1 font-medium text-gray-900">
                                     {{
                                         getUserById(ticket.assigned_to).value
-                                            .first_name
+                                            ?.first_name
                                     }}
                                     {{
-                                        getUserById(ticket.assigned_to)?.value
-                                            .last_name
+                                        getUserById(ticket.assigned_to).value
+                                            ?.last_name
                                     }}
                                 </dd>
                             </div>
@@ -324,7 +351,7 @@ const handleSubmit = async (
                                 <dd class="mt-1 font-medium text-gray-900">
                                     {{
                                         getCategoryById(ticket.category_id)
-                                            ?.value.name
+                                            .value?.name
                                     }}
                                 </dd>
                             </div>
@@ -356,9 +383,14 @@ const handleSubmit = async (
             <div class="mt-8">
                 <div v-if="user.is_admin" class="mb-6">
                     <h2 class="text-lg font-semibold text-gray-900">
-                        Add a response
+                        Response form
                     </h2>
-                    <ResponseForm :response="response" @submit="handleSubmit" />
+                    <ResponseForm
+                        :response="response"
+                        :editing-id="editingResponseId"
+                        @submit="handleSubmit"
+                        @cancel="cancelEditResponse"
+                    />
                 </div>
             </div>
             <h2 class="text-lg font-semibold text-gray-900">Responses</h2>
@@ -370,9 +402,16 @@ const handleSubmit = async (
                 >
                     <p class="text-sm text-gray-500">
                         {{ formatDate(response.created_at) }} by
-                        {{ getUserById(response.user_id)?.value.first_name }}
-                        {{ getUserById(response.user_id)?.value.last_name }}
+                        {{ getUserById(response.user_id).value?.first_name }}
+                        {{ getUserById(response.user_id).value?.last_name }}
                     </p>
+                    <button
+                        v-if="user.is_admin"
+                        @click="startEditResponse(response)"
+                        class="mt-2 rounded-md bg-blue-600 px-3 py-1 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    >
+                        Edit Response
+                    </button>
                     <p class="mt-2 text-sm leading-7 text-gray-700">
                         {{ response.content }}
                     </p>

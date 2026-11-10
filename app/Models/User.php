@@ -34,12 +34,17 @@ class User extends Authenticatable
 
     public function tickets():hasMany
     {
-        return $this->hasMany(Ticket::class);
+        return $this->hasMany(Ticket::class, 'made_by');
+    }
+
+    public function assignedTickets()
+    {
+        return $this->hasMany(Ticket::class, 'assigned_to');
     }
 
     public function responses():hasMany
     {
-        return $this->hasMany(Response::class);
+        return $this->hasMany(Response::class, 'user_id');
     }
 
     public function notes():hasMany

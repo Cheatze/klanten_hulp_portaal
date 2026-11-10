@@ -49,6 +49,11 @@ onMounted(async () => {
                         class="text-gray-700 hover:text-indigo-600 margin-left-4"
                         >Create Category</router-link
                     >
+                    <router-link
+                        :to="{ name: 'users.overview' }"
+                        class="text-gray-700 hover:text-indigo-600 padding-right-4"
+                        >Users</router-link
+                    >
                 </template>
             </template>
         </div>

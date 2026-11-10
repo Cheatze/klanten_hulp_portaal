@@ -18,3 +18,7 @@ export const getUserById = userStore.getters.getById;
 //actions
 export const fetchUsers = userStore.actions.getAll;
 export const fetchUserById = userStore.actions.fetchById;
+
+//setters
+export const updateUser = userStore.actions.update;
+export const deleteUser = userStore.actions.delete;

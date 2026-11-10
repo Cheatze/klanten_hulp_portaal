@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { Response } from "../store";
 import FormError from "../../components/FormError.vue";
 
@@ -11,15 +11,27 @@ import FormError from "../../components/FormError.vue";
 
 const props = defineProps<{
     response?: Omit<Response, "id" | "created_at" | "updated_at">;
+    editingId?: number | null;
 }>();
 
-const emit = defineEmits(["submit"]);
+const emit = defineEmits(["submit", "cancel"]);
 
 const form = ref({ ...props.response });
 
+// Keep form in sync when parent swaps response content (e.g. start/stop editing)
+watch(
+    () => props.response,
+    (next) => {
+        form.value = { ...next };
+    },
+    { deep: true },
+);
+
 const handleSubmit = () => {
     emit("submit", form.value);
-    form.value.content = ""; // Clear the response form after submission
+    if (!props.editingId) {
+        form.value.content = ""; // Clear the response form after submission
+    }
 };
 </script>
 <template>
@@ -31,8 +43,9 @@ const handleSubmit = () => {
             <label
                 for="response"
                 class="block text-sm font-medium text-gray-700 mb-1"
-                >Response</label
             >
+                {{ editingId ? "Edit response" : "Response" }}
+            </label>
             <textarea
                 id="response"
                 v-model="form.content"
@@ -42,11 +55,22 @@ const handleSubmit = () => {
             <FormError name="content" />
         </div>
 
-        <button
-            @click=""
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-            Submit Response
-        </button>
+        <div class="flex gap-2">
+            <button
+                type="submit"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+                {{ editingId ? "Save changes" : "Submit" }}
+            </button>
+
+            <button
+                v-if="editingId"
+                type="button"
+                @click="emit('cancel')"
+                class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+                Cancel edit
+            </button>
+        </div>
     </form>
 </template>

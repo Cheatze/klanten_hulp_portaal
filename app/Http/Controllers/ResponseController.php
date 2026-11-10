@@ -67,7 +67,9 @@ class ResponseController extends Controller
      */
     public function update(UpdateResponseRequest $request, Response $response)
     {
-        //
+        $response->update($request->validated());
+
+        return new ResponseResource($response);
     }
 
     /**

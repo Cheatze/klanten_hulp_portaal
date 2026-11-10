@@ -45,6 +45,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/categories/{category}', [CategoryController::class, 'update']);
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
         Route::post('/responses', [ResponseController::class, 'store']);
+        Route::patch('/responses/{response}', [ResponseController::class, 'update']);
+        Route::delete('/users/{user}', [UserController::class, 'destroy']);
+        Route::put('/users/{user}', [UserController::class, 'update']);
     });
 
     Route::get('/user', function (Request $request) {

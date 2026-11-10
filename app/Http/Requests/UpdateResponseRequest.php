@@ -12,7 +12,13 @@ class UpdateResponseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $user = $this->user();
+
+        if ($user->is_admin) {
+            return true;
+        } else{
+            return false;
+        }
     }
 
     /**
@@ -23,7 +29,7 @@ class UpdateResponseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'content' => ['required', 'string'],
         ];
     }
 }

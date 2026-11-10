@@ -108,6 +108,12 @@ const DeleteConfirmation = async (userId: number) => {
                     >
                         Actions
                     </th>
+                    <th
+                        scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                        Edit
+                    </th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -135,6 +141,13 @@ const DeleteConfirmation = async (userId: number) => {
                         >
                             Delete
                         </button>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <a
+                            :href="`/users/${user.id}`"
+                            class="text-blue-600 hover:text-blue-900"
+                            >Edit</a
+                        >
                     </td>
                 </tr>
             </tbody>

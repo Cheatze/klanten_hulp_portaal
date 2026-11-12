@@ -101,6 +101,27 @@ const cancelEditResponse = () => {
     };
 };
 
+//Edit note
+const editingNoteId = ref<number | null>(null);
+
+const startEditNote = (n: Note) => {
+    editingNoteId.value = n.id;
+    note.value = {
+        content: n.content,
+        ticket_id: n.ticket_id,
+        user_id: n.user_id,
+    };
+};
+
+const cancelEditNote = () => {
+    editingNoteId.value = null;
+    note.value = {
+        content: "",
+        ticket_id: ticket.value?.id || ticketId,
+        user_id: user.value?.id || 0,
+    };
+};
+
 const assignTicket = async () => {
     if (!selectedAdminId.value) return;
 
@@ -131,6 +152,16 @@ const handleChangeStatus = async () => {
     ticket = getTicketById(ticketId);
 };
 
+const deleteNoteConfirm = async (noteId: number) => {
+    const confirmed = window.confirm(
+        "Are you sure you want to delete this note?",
+    );
+    if (confirmed) {
+        await deleteNote(noteId);
+        await fetchNotes();
+    }
+};
+
 const handleSubmit = async (
     data: Omit<Response, "id" | "created_at" | "updated_at">,
 ) => {
@@ -141,6 +172,18 @@ const handleSubmit = async (
         await createResponse(data);
     }
     await fetchResponses();
+};
+
+const handleNoteSubmit = async (
+    data: Omit<Note, "id" | "created_at" | "updated_at">,
+) => {
+    if (editingNoteId.value !== null) {
+        await updateNote(editingNoteId.value, data);
+        cancelEditNote(); // reset form back to "new note" mode
+    } else {
+        await createNote(data);
+    }
+    await fetchNotes();
 };
 </script>
 <template>
@@ -447,6 +490,13 @@ const handleSubmit = async (
             </div>
             <p v-else class="mt-4 text-sm text-gray-500">No responses yet.</p>
             <div v-if="user.is_admin" class="mt-8">
+                <h2 class="text-lg font-semibold text-gray-900">Notes form</h2>
+                <NoteForm
+                    :response="note"
+                    :editing-id="editingNoteId"
+                    @submit="handleNoteSubmit"
+                    @cancel="cancelEditNote"
+                />
                 <h2 class="text-lg font-semibold text-gray-900">Notes</h2>
                 <div v-if="notesSorted.length > 0" class="mt-4 space-y-4">
                     <div
@@ -459,6 +509,13 @@ const handleSubmit = async (
                             {{ getUserById(note.user_id).value?.first_name }}
                             {{ getUserById(note.user_id).value?.last_name }}
                         </p>
+                        <button
+                            v-if="user.is_admin"
+                            @click="startEditNote(note)"
+                            class="mt-2 rounded-md bg-blue-600 px-3 py-1 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        >
+                            Edit Note
+                        </button>
                         <p class="mt-2 text-sm leading-7 text-gray-700">
                             {{ note.content }}
                         </p>

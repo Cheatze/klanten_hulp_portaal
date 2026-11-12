@@ -51,7 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/users/{user}', [UserController::class, 'update']);
         Route::get('/notes', [NoteController::class, 'index']);
         Route::post('/notes', [NoteController::class, 'store']);
-        Route::patch('/notes/{note}', [NoteController::class, 'update']);
+        Route::put('/notes/{note}', [NoteController::class, 'update']);
         Route::delete('/notes/{note}', [NoteController::class, 'destroy']);
 
     });

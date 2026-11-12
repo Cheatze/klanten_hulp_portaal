@@ -21,16 +21,16 @@ watch(
 const handleSubmit = async (
     data: Omit<User, "id" | "created_at" | "updated_at">,
 ) => {
-    if (data.is_admin === true) {
-        alert("User will be set as admin.");
-    }
+    // if (data.is_admin === true) {
+    //     alert("User will be set as admin.");
+    // }
     await updateUser(userId.value, data);
     router.push({ name: "users.overview" });
     //fetchUsers(); // Refresh the user list after updating
 };
 </script>
 <template>
-    <h1 class="text-2xl font-bold mb-4">User Details</h1>
+    <h1 class="text-2xl max-w-2xl mx-auto font-bold mb-4">Edit User Details</h1>
     <div v-if="user">
         <UserForm :user="user" @submit="handleSubmit" />
     </div>

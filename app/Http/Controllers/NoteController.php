@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use App\Http\Requests\StoreNoteRequest;
 use App\Http\Requests\UpdateNoteRequest;
+use App\Http\Resources\NoteResource;
 
 class NoteController extends Controller
 {
@@ -13,7 +14,8 @@ class NoteController extends Controller
      */
     public function index()
     {
-        //
+        $notes = Note::all();
+        return NoteResource::collection($notes);
     }
 
     /**
@@ -29,7 +31,8 @@ class NoteController extends Controller
      */
     public function store(StoreNoteRequest $request)
     {
-        //
+        $note = Note::create($request->validated());
+        return new NoteResource($note);
     }
 
     /**
@@ -53,7 +56,8 @@ class NoteController extends Controller
      */
     public function update(UpdateNoteRequest $request, Note $note)
     {
-        //
+        $note->update($request->validated());
+        return new NoteResource($note);
     }
 
     /**
@@ -61,6 +65,7 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
-        //
+        $note->delete();
+        return response()->json(null, 204);
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Middleware\CheckAdminStatus;
@@ -48,6 +49,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/responses/{response}', [ResponseController::class, 'update']);
         Route::delete('/users/{user}', [UserController::class, 'destroy']);
         Route::put('/users/{user}', [UserController::class, 'update']);
+        Route::get('/notes', [NoteController::class, 'index']);
+        Route::post('/notes', [NoteController::class, 'store']);
+        Route::patch('/notes/{note}', [NoteController::class, 'update']);
+        Route::delete('/notes/{note}', [NoteController::class, 'destroy']);
+
     });
 
     Route::get('/user', function (Request $request) {

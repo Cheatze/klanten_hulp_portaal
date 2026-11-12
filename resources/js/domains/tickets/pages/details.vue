@@ -11,11 +11,18 @@ import {
     createResponse,
     Response,
     patchResponse,
+    fetchNotes,
+    getAllNotes,
+    createNote,
+    updateNote,
+    deleteNote,
+    Note,
 } from "../store";
 import { fetchUsers, getUserById, getAllUsers } from "../../users/store";
 import { useRoute, useRouter } from "vue-router";
 import { useAuth } from "../../../composables/useAuth";
 import ResponseForm from "../components/ResponseForm.vue";
+import NoteForm from "../components/NoteForm.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -26,6 +33,22 @@ fetchById(ticketId);
 fetchResponses();
 fetchUsers();
 fetchCategories();
+
+if (user.value?.is_admin) {
+    fetchNotes();
+}
+
+const notesSorted = computed(() =>
+    user.value?.is_admin
+        ? getAllNotes.value
+              .filter((n) => n.ticket_id === ticketId)
+              .sort(
+                  (a, b) =>
+                      new Date(b.created_at).getTime() -
+                      new Date(a.created_at).getTime(),
+              )
+        : [],
+);
 
 const responses = computed(() =>
     getAllResponses.value.filter((r) => r.ticket_id === ticketId),
@@ -38,7 +61,12 @@ const response = ref<Omit<Response, "id" | "created_at" | "updated_at">>({
     ticket_id: ticket.value?.id || ticketId,
     user_id: user.value?.id || 0,
 });
-//const response = ref(Response);
+
+const note = ref<Omit<Note, "id" | "created_at" | "updated_at">>({
+    content: "",
+    ticket_id: ticket.value?.id || ticketId,
+    user_id: user.value?.id || 0,
+});
 
 // Assign form state
 const showAssignForm = ref(false);
@@ -52,7 +80,7 @@ const isStatusSubmitting = ref(false);
 
 const admins = computed(() => getAllUsers.value.filter((u) => u.is_admin));
 
-//Edit
+//Edit response
 const editingResponseId = ref<number | null>(null);
 
 const startEditResponse = (r: Response) => {
@@ -418,6 +446,26 @@ const handleSubmit = async (
                 </div>
             </div>
             <p v-else class="mt-4 text-sm text-gray-500">No responses yet.</p>
+            <div v-if="user.is_admin" class="mt-8">
+                <h2 class="text-lg font-semibold text-gray-900">Notes</h2>
+                <div v-if="notesSorted.length > 0" class="mt-4 space-y-4">
+                    <div
+                        v-for="note in notesSorted"
+                        :key="note.id"
+                        class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+                    >
+                        <p class="text-sm text-gray-500">
+                            {{ formatDate(note.created_at) }} by
+                            {{ getUserById(note.user_id).value?.first_name }}
+                            {{ getUserById(note.user_id).value?.last_name }}
+                        </p>
+                        <p class="mt-2 text-sm leading-7 text-gray-700">
+                            {{ note.content }}
+                        </p>
+                    </div>
+                </div>
+                <p v-else class="mt-4 text-sm text-gray-500">No notes yet.</p>
+            </div>
         </div>
         <!-- </div> -->
     </main>

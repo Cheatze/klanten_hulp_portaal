@@ -13,12 +13,16 @@ const form = ref({ ...props.user });
 const emit = defineEmits<{
     (e: "submit", data: Omit<User, "id" | "created_at" | "updated_at">): void;
 }>();
+
+const handleSubmit = () => {
+    emit("submit", form.value);
+};
 </script>
 <template>
-    <h1>Edit User form</h1>
+    <h1 class="text-2xl max-w-2xl mx-auto font-bold mb-4">Edit User</h1>
     <div class="mx-auto max-w-2xl">
         <form
-            @submit.prevent="emit('submit', form)"
+            @submit.prevent="handleSubmit"
             class="space-y-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
         >
             <div>
@@ -37,6 +41,7 @@ const emit = defineEmits<{
                     class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                     placeholder="Enter first name"
                 />
+                <FormError name="first_name" />
             </div>
 
             <div>
@@ -55,6 +60,7 @@ const emit = defineEmits<{
                     class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                     placeholder="Enter last name"
                 />
+                <FormError name="last_name" />
             </div>
 
             <div>
@@ -73,6 +79,7 @@ const emit = defineEmits<{
                     class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                     placeholder="Enter email address"
                 />
+                <FormError name="email" />
             </div>
 
             <div>
@@ -90,6 +97,7 @@ const emit = defineEmits<{
                     class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                     placeholder="Enter telephone number (optional)"
                 />
+                <FormError name="telephone" />
             </div>
 
             <div>
@@ -103,8 +111,9 @@ const emit = defineEmits<{
                 <input
                     id="is_admin"
                     v-model="form.is_admin"
+                    name="role"
                     type="radio"
-                    value="true"
+                    :value="true"
                     class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                 />
                 <label for="is_admin" class="ml-2 text-sm text-gray-700"
@@ -113,9 +122,10 @@ const emit = defineEmits<{
                 <input
                     id="is_user"
                     v-model="form.is_admin"
+                    name="role"
                     type="radio"
-                    value="false"
-                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    :value="false"
+                    class="rounded border-gray-300 text-blue-600 shadow-sm px-3 py-2 mx-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                 />
                 <label for="is_user" class="ml-2 text-sm text-gray-700"
                     >No</label

@@ -65,17 +65,24 @@ export const updateResponse = responseStore.actions.update;
 export const patchResponse = responseStore.actions.patch;
 export const deleteResponse = responseStore.actions.delete;
 
-// export type Category = {
-//     id: number;
-//     name: string;
-// };
+export type Note = {
+    id: number;
+    ticket_id: number;
+    content: string;
+    user_id: number;
+    created_at: string;
+};
 
-// const categoryStore = storeModuleFactory<Category>("categories");
+const noteStore = storeModuleFactory<Note>("notes");
 
-// //getters
-// export const getAllCategories = categoryStore.getters.all;
-// export const getCategoryById = categoryStore.getters.getById;
+//getters
+export const getAllNotes = noteStore.getters.all;
+export const getNoteById = noteStore.getters.getById;
 
-// //Actions
-// export const fetchCategories = categoryStore.actions.getAll;
-// export const fetchCatagoryById = categoryStore.actions.fetchById;
+//actions
+export const fetchNotes = noteStore.actions.getAll;
+
+//setters
+export const createNote = noteStore.actions.create;
+export const updateNote = noteStore.actions.update;
+export const deleteNote = noteStore.actions.delete;

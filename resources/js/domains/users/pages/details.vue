@@ -21,9 +21,11 @@ watch(
 const handleSubmit = async (
     data: Omit<User, "id" | "created_at" | "updated_at">,
 ) => {
-    // if (data.is_admin === true) {
-    //     alert("User will be set as admin.");
-    // }
+    if (data.is_admin === true) {
+        if (!confirm("User will be set as admin.")) {
+            return;
+        }
+    }
     await updateUser(userId.value, data);
     router.push({ name: "users.overview" });
     //fetchUsers(); // Refresh the user list after updating

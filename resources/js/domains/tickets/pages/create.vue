@@ -6,14 +6,13 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const ticket = ref<
-    Omit<Ticket, "id" | "created_at" | "updated_at" | "made_by" | "assigned_to">
->({
-    title: "",
-    description: "",
-    status: "open",
-    category_id: 0,
-});
+const ticket =
+    ref<
+        Omit<
+            Ticket,
+            "id" | "created_at" | "updated_at" | "made_by" | "assigned_to"
+        >
+    >();
 
 const handleSubmit = async (
     data: Omit<

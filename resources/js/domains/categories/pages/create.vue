@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import CategoryForm from "../components/CategoryForm.vue";
 import { ref } from "vue";
 import { createCategory, Category } from "../store";
@@ -8,7 +8,6 @@ const category = ref<Omit<Category, "id" | "created_at" | "updated_at">>({
     name: "",
 });
 
-const route = useRoute();
 const router = useRouter();
 
 const handleSubmit = async (

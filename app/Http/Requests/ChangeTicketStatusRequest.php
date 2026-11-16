@@ -12,7 +12,7 @@ class ChangeTicketStatusRequest extends FormRequest
      */
     public function authorize(): bool
     {
-                $user = $this->user();
+        $user = $this->user();
 
         if ($user->is_admin) {
             return true;

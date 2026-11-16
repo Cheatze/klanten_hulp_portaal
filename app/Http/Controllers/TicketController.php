@@ -36,8 +36,6 @@ class TicketController extends Controller
 
     return TicketResource::collection($tickets);
 
-        // $tickets = Ticket::all();
-        // return TicketResource::collection($tickets);
     }
 
     /**
@@ -54,25 +52,11 @@ class TicketController extends Controller
     public function store(StoreTicketRequest $request)
     {
         $validated = $request->validated();
-        // [
-        //     'title' => ['required', 'string', 'max:255'],
-        //     'description' => ['required', 'string'],
-        //     'status' => [
-        //         'required',
-        //         Rule::in(['open', 'pending', 'closed']),
-        //     ],
-        //     'category_id' => [
-        //         'required',
-        //         'integer',
-        //         'exists:categories,id',
-        //     ],
-        // ]);
 
         $validated['made_by'] = $request->user()->id;
 
         $ticket = Ticket::create($validated);
 
-        //return response()->json($ticket, 201);
         return (new TicketResource($ticket))
             ->response()
             ->setStatusCode(201);
@@ -126,9 +110,6 @@ class TicketController extends Controller
      */
     public function assignTicket(AssignTicketRequest $request, Ticket $ticket)
     {
-        // $request->validate([
-        //     'assigned_to' => ['required', 'integer', 'exists:users,id'],
-        // ]);
 
         $ticket->assigned_to = $request->input('assigned_to');
         $ticket->save();

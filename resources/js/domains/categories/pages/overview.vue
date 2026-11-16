@@ -31,21 +31,15 @@ const DeleteConfirmation = async (categoryId: number) => {
         alertMessage.value = null;
 
         try {
-            // Await the store's delete action (assuming it makes an Axios call)
-            const response = await deleteCategory(categoryId);
-
-            // Success message from Laravel response -> { message: '...' }
             alertMessage.value =
-                response?.data?.message || "Category deleted successfully.";
+                (await deleteCategory(categoryId)) ||
+                "Category deleted successfully.";
             alertType.value = "success";
-        } catch (error: any) {
-            // Error message from Laravel response -> { error: '...' } (Status 400)
-            if (error.response && error.response.data.error) {
-                alertMessage.value = error.response.data.error;
-            } else {
-                alertMessage.value =
-                    error.message || "An unexpected error occurred.";
-            }
+        } catch (error: unknown) {
+            alertMessage.value =
+                error instanceof Error
+                    ? error.message
+                    : "An unexpected error occurred.";
             alertType.value = "error";
         }
     }

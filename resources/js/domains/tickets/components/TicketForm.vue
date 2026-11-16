@@ -2,24 +2,38 @@
 import { ref, watch } from "vue";
 import { fetchCategories, getAllCategories } from "../../categories/store";
 import { Ticket } from "../store";
-import { fetchUsers, getAllUsers } from "../../users/store";
+import { fetchUsers } from "../../users/store";
 import ErrorMessage from "../..//components/ErrorMessage.vue";
 import FormError from "../../components/FormError.vue";
 
 fetchCategories();
 fetchUsers();
 
-// const props = defineProps<{
-//     ticket: Omit<Ticket, "id" | "made_by"> & { id?: number; made_by?: number };
-// }>();
+type TicketFormModel = Omit<
+    Ticket,
+    "id" | "made_by" | "created_at" | "updated_at" | "assigned_to"
+> & { id?: number };
 
-const props = defineProps({
-    ticket: Object,
-});
+const props = withDefaults(
+    defineProps<{
+        ticket?: TicketFormModel;
+    }>(),
+    {
+        ticket: () => ({
+            title: "",
+            description: "",
+            status: "open",
+            assigned_to: null,
+            category_id: 0,
+        }),
+    },
+);
 
-const emit = defineEmits(["submit"]);
+const emit = defineEmits<{
+    submit: [ticket: TicketFormModel];
+}>();
 
-const form = ref({ ...props.ticket });
+const form = ref<TicketFormModel>({ ...props.ticket });
 
 watch(
     () => props.ticket,
@@ -100,34 +114,6 @@ const handleSubmit = () => {
 
             <FormError name="status" />
         </div>
-
-        <!-- <div>
-            <label
-                for="assigned_to"
-                class="mb-2 block text-sm font-medium text-gray-700"
-            >
-                Assigned to
-            </label>
-
-            <select
-                id="assigned_to"
-                v-model="form.assigned_to"
-                required
-                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-            >
-                <option :value="0" disabled>Select a user</option>
-
-                <option
-                    v-for="user in getAllUsers"
-                    :key="user.id"
-                    :value="user.id"
-                >
-                    {{ user.first_name }} {{ user.last_name }}
-                </option>
-            </select>
-
-            <FormError name="assigned_to" />
-        </div> -->
 
         <div>
             <label

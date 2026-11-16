@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useRoute } from "vue-router";
 import {
     fetchCategories,
@@ -18,7 +18,6 @@ fetchCategories();
 const category = computed(() => getCategoryById(categoryId.value).value);
 
 const handleSubmit = async (data: Omit<Category, "id">) => {
-    //data.id = categoryId;
     await patchCategory(categoryId.value, data);
     router.push({ name: "categories.overview" });
 };

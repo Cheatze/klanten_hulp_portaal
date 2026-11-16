@@ -1,21 +1,12 @@
 <script setup lang="ts">
-import {
-    fetchTickets,
-    fetchTicketsByUser,
-    getAllTickets,
-    formatDate,
-} from "../store";
+import { fetchTicketsByUser, getAllTickets, formatDate } from "../store";
 import { fetchCategories, getCategoryById } from "../../categories/store";
 import { fetchUsers, getAllUsers, getUserById } from "../../users/store";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import { useAuth } from "../../../composables/useAuth";
 
-const router = useRouter();
 const route = useRoute();
 const { user } = useAuth();
-
-//Test to see the user id of the logged in user
-//alert("User id: " + user.value?.id);
 
 if (route.query.verified === "1") {
     alert("Your email has been verified.");

@@ -24,10 +24,9 @@ const handleLogin = async () => {
             password: password.value,
         });
 
-        //window.location.reload();
         router.push({ name: "tickets.overview" });
     } catch (err) {
-        // Handle login error
+        // Errors are handled globally by error service/components
     } finally {
         loading.value = false;
     }

@@ -19,13 +19,12 @@ import {
     Note,
 } from "../store";
 import { fetchUsers, getUserById, getAllUsers } from "../../users/store";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useAuth } from "../../../composables/useAuth";
 import ResponseForm from "../components/ResponseForm.vue";
 import NoteForm from "../components/NoteForm.vue";
 
 const route = useRoute();
-const router = useRouter();
 const ticketId = Number(route.params.id);
 const { user } = useAuth();
 

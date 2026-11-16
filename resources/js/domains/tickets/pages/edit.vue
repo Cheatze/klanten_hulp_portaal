@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
-import {
-    fetchById,
-    getTicketById,
-    updateTicket,
-    Ticket,
-} from "../store";
+import { computed, watch } from "vue";
+import { fetchById, getTicketById, updateTicket, Ticket } from "../store";
 import TicketForm from "../components/TicketForm.vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -22,7 +17,7 @@ watch(
     (id) => {
         if (id) fetchById(id);
     },
-    { immediate: true }
+    { immediate: true },
 );
 
 const handleSubmit = async (
@@ -37,7 +32,7 @@ const handleSubmit = async (
 };
 </script>
 <template>
-        <main class="min-h-screen bg-gray-50 px-4 py-10 sm:px-6 lg:px-8">
+    <main class="min-h-screen bg-gray-50 px-4 py-10 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-2xl">
             <div class="mb-8">
                 <p

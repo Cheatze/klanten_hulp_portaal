@@ -85,9 +85,10 @@ export const storeModuleFactory = <T extends Identifiable>(
             if (!data) return;
             setters.setOne(data);
         },
-        delete: async (id: number): Promise<void> => {
-            await deleteRequest(`${moduleName}/${id}`);
+        delete: async (id: number): Promise<string> => {
+            const { data } = await deleteRequest(`${moduleName}/${id}`);
             setters.deleteByItem({ id });
+            return typeof data?.message === "string" ? data.message : "";
         },
     };
 

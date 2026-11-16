@@ -11,8 +11,6 @@ class UserController extends Controller
 {
     public function index()
     {
-        // $users = User::all();
-        // return response()->json($users);
         return UserResource::collection(User::all());
     }
 
@@ -41,13 +39,8 @@ class UserController extends Controller
             );
         }
 
-        // if($user->tickets()->exists()){
-        //     return response()->json(['message' => 'Cannot delete user with associated tickets'], 400);
-        // } else if($user->responses()->exists()){
-        //     return response()->json(['message' => 'Cannot delete user with associated responses'], 400);
-        // } else{
-        //     $user->delete();
-        // }
-        // return response()->json(['message' => 'User deleted successfully']);
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted successfully']);
     }
 }

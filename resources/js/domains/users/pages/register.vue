@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { http } from "../../../services/http";
 import FormError from "../../components/FormError.vue";
 import { useAuth } from "../../../composables/useAuth";
 
@@ -33,8 +32,6 @@ const handleRegister = async () => {
     loading.value = true;
 
     try {
-        // await http.get("/sanctum/csrf-cookie");
-        // await http.post("/register", form.value);
         await register(form.value); // Use the register function from useAuth
 
         // Redirect to overview after successful registration

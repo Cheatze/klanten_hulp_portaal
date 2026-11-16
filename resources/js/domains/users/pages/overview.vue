@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRouter } from "vue-router";
 import { fetchUsers, getAllUsers, deleteUser } from "../store";
 
 fetchUsers();
-
-const router = useRouter();
 
 // Reactive states for alerts
 const alertMessage = ref<string | null>(null);

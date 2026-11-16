@@ -516,6 +516,13 @@ const handleNoteSubmit = async (
                         >
                             Edit Note
                         </button>
+                        <button
+                            v-if="user.is_admin"
+                            @click="deleteNoteConfirm(note.id)"
+                            class="ml-2 mt-2 rounded-md bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        >
+                            Delete Note
+                        </button>
                         <p class="mt-2 text-sm leading-7 text-gray-700">
                             {{ note.content }}
                         </p>

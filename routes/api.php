@@ -18,16 +18,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('user/login', [AuthController::class, 'login']);
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
-
-Route::get('/tickets', [TicketController::class, 'index']);
-Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
-Route::get('/responses', [ResponseController::class, 'index']);
-
-Route::get('/categories', [CategoryController::class, 'index']);
-
 Route::get('/users', [UserController::class, 'index']);
 
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
@@ -40,6 +30,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tickets', [TicketController::class, 'store']);
     Route::put('/tickets/{ticket}', [TicketController::class, 'update']);
     Route::patch('/tickets/{ticket}', [TicketController::class, 'patchTicket']);
+
+    Route::get('/tickets', [TicketController::class, 'index']);
+    Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
+    Route::get('/responses', [ResponseController::class, 'index']);
+    Route::get('/categories', [CategoryController::class, 'index']);
 
     Route::middleware(CheckAdminStatus::class)->group(function () {
         Route::post('/categories', [CategoryController::class, 'store']);

@@ -1,4 +1,5 @@
 import { storeModuleFactory } from "../../services/store";
+import { http } from "../../services/http";
 
 export type User = {
     id: number;

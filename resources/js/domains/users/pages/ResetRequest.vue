@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { http } from "../../../services/http/index.ts";
+import { requestPasswordReset } from "../authStore.ts";
 import FormError from "../../components/FormError.vue";
 
 const email = ref("");
@@ -12,11 +12,7 @@ const submitResetRequest = async () => {
     statusMessage.value = "";
 
     try {
-        await http.get("/sanctum/csrf-cookie");
-        const response = await http.post("/forgot-password", {
-            email: email.value,
-        });
-        statusMessage.value = response.data.message;
+        statusMessage.value = await requestPasswordReset(email.value);
     } catch (err: any) {
         // Errors handled by your error service / FormError
     } finally {

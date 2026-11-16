@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { http } from "../../../services/http/index.ts";
+import { resetPassword, readQueryString } from "../authStore.ts";
 import FormError from "../../components/FormError.vue";
 
 const route = useRoute();
 const router = useRouter();
 
-const email = ref(route.query.email || "");
-const token = ref(route.query.token || "");
+const email = ref(readQueryString(route.query.email));
+const token = ref(readQueryString(route.query.token));
 const password = ref("");
 const passwordConfirmation = ref("");
 const successMessage = ref("");
@@ -19,15 +19,12 @@ const handlePasswordReset = async () => {
     successMessage.value = "";
 
     try {
-        await http.get("/sanctum/csrf-cookie");
-        const response = await http.post("/reset-password", {
+        successMessage.value = await resetPassword({
             token: token.value,
             email: email.value,
             password: password.value,
             password_confirmation: passwordConfirmation.value,
         });
-
-        successMessage.value = response.data.message;
         setTimeout(() => router.push({ name: "users.login" }), 2000);
     } catch (err) {
         // Handled by error service

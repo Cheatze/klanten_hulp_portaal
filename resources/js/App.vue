@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import { R } from "vue-router/dist/index-D7ja2BKs.js";
 import { onMounted } from "vue";
 import { useAuth } from "./composables/useAuth";
 const { isAuthenticated, user, logout, fetchUser } = useAuth();
@@ -10,23 +9,12 @@ onMounted(async () => {
 </script>
 <template>
     <h1 class="text-2xl font-bold mb-4">Customer Support Portal</h1>
-    <!-- <nav>
-        <router-link :to="{ name: 'tickets.overview' }"
-            ><p>Tickets Overzicht</p></router-link
-        >
-        |
-        <router-link :to="{ name: 'tickets.create' }"
-            ><p>Nieuw Ticket</p></router-link
-        >
-        <router-link :to="{ name: 'users.login' }"><p>Login</p></router-link>
-    </nav> -->
     <nav class="flex items-center justify-between bg-white px-6 py-4 shadow-md">
         <div class="flex space-x-4">
             <!-- <router-link to="/" class="text-gray-700 hover:text-indigo-600"
                 >Home</router-link
             > -->
             <!-- Protected link visible only when logged in -->
-            <!-- <router-link v-if="isAuthenticated" to="/dashboard" class="text-gray-700 hover:text-indigo-600">Dashboard</router-link> -->
             <template v-if="isAuthenticated">
                 <router-link
                     :to="{ name: 'tickets.overview' }"

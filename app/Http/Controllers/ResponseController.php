@@ -42,8 +42,7 @@ class ResponseController extends Controller
         $response->user->notify(new ResponseCreatedNotification($response));
 
         return (new ResponseResource($response))
-            ->response()
-            ->setStatusCode(201);
+            ->response();
     }
 
     /**

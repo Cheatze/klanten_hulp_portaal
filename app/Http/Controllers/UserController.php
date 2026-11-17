@@ -34,8 +34,7 @@ class UserController extends Controller
             $user->responses()->exists()
         ) {
             return response()->json(
-                ['message' => 'Cannot delete user with associated tickets or responses'],
-                400
+                ['message' => 'Cannot delete user with associated tickets or responses']
             );
         }
 

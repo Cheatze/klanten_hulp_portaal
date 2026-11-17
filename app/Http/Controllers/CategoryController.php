@@ -9,22 +9,6 @@ use App\Http\Resources\CategoryResource;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-
-        return CategoryResource::collection(Category::all());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -32,24 +16,10 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
 
-        return response()->json(Category::create($request->validated()), 201);
-    }
+        $validated = $request->validated();
+        $category = Category::create($validated);
+        return (new CategoryResource($category))->response();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Category $category)
-    {
-        //return response()->json($category);
-        return new CategoryResource($category);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Category $category)
-    {
-        //
     }
 
     /**
@@ -67,7 +37,7 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         if ($category->tickets()->exists()) {
-            return response()->json(['error' => 'Cannot delete category with associated tickets.'], 400);
+            return response()->json(['error' => 'Cannot delete category with associated tickets.']);
         }
         $category->delete();
         return response()->json(['message' => 'Category deleted successfully.']);

@@ -39,14 +39,6 @@ class TicketController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-        
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreTicketRequest $request)
@@ -58,8 +50,7 @@ class TicketController extends Controller
         $ticket = Ticket::create($validated);
 
         return (new TicketResource($ticket))
-            ->response()
-            ->setStatusCode(201);
+            ->response();
     }
 
     /**
@@ -68,14 +59,6 @@ class TicketController extends Controller
     public function show(Ticket $ticket)
     {
         return response()->json($ticket);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(request $request, Ticket $ticket)
-    {
-        
     }
 
     /**
@@ -117,11 +100,4 @@ class TicketController extends Controller
         return response()->json($ticket);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Ticket $ticket)
-    {
-        //
-    }
 }

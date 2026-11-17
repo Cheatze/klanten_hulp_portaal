@@ -14,8 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        // $categories = Category::all();
-        // return response()->json($categories);
+
         return CategoryResource::collection(Category::all());
     }
 
@@ -32,9 +31,7 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        // $validated = $request->validated();
-        // $category = Category::create($validated);
-        // return response()->json($category, 201);
+
         return response()->json(Category::create($request->validated()), 201);
     }
 
@@ -61,7 +58,6 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         $category->update($request->validated());
-        // return response()->json($category);
         return new CategoryResource($category);
     }
 

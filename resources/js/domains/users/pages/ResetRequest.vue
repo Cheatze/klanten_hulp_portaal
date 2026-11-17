@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { requestPasswordReset } from "../authStore.ts";
+import { requestPasswordReset } from "../../../composables/useAuth";
 import FormError from "../../components/FormError.vue";
 
 const email = ref("");

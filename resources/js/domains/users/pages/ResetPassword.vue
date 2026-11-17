@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { resetPassword, readQueryString } from "../authStore.ts";
+import { resetPassword, readQueryString } from "../../../composables/useAuth";
 import FormError from "../../components/FormError.vue";
 
 const route = useRoute();

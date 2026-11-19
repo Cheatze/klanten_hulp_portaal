@@ -52,7 +52,7 @@ const handleSubmit = async (
                 </p>
             </div>
 
-            <TicketForm :ticket="ticket" @submit="handleSubmit" />
+            <TicketForm v-if="ticket" :ticket="ticket" @submit="handleSubmit" />
         </div>
     </main>
 </template>

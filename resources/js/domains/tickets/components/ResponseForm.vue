@@ -4,7 +4,7 @@ import { Response } from "../../responses/store.ts";
 import FormError from "../../components/FormError.vue";
 
 const props = defineProps<{
-    response?: Omit<Response, "id" | "created_at" | "updated_at">;
+    response: Omit<Response, "id" | "created_at" | "updated_at">;
     editingId?: number | null;
 }>();
 

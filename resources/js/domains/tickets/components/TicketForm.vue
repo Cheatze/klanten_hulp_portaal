@@ -16,7 +16,7 @@ type TicketFormModel = Omit<
 
 const props = withDefaults(
     defineProps<{
-        ticket?: TicketFormModel;
+        ticket: TicketFormModel;
     }>(),
     {
         ticket: () => ({
@@ -38,9 +38,7 @@ const form = ref<TicketFormModel>({ ...props.ticket });
 watch(
     () => props.ticket,
     (newTicket) => {
-        if (newTicket) {
-            form.value = { ...newTicket };
-        }
+        form.value = { ...newTicket };
     },
     { immediate: true },
 );

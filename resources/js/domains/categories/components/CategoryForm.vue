@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import ErrorMessage from "../..//components/ErrorMessage.vue";
 import FormError from "../../components/FormError.vue";
 
 interface Category {
@@ -9,19 +8,19 @@ interface Category {
 }
 
 const props = defineProps<{
-    category?: Category;
+    category: Category;
 }>();
 
-const emit = defineEmits(["submit"]);
+const emit = defineEmits<{
+    submit: [data: Category];
+}>();
 
-const form = ref({ ...props.category });
+const form = ref<Category>({ ...props.category });
 
 watch(
     () => props.category,
     (newCategory) => {
-        if (newCategory) {
-            form.value = { ...newCategory };
-        }
+        form.value = { ...newCategory };
     },
     { immediate: true },
 );

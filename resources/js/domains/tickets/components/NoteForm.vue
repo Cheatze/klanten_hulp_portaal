@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { Note } from "../store";
+import { Note } from "../../notes/store";
 
 const props = defineProps<{
-    response?: Omit<
+    response: Omit<
         Note,
         "id" | "created_at" | "updated_at" | "ticket_id" | "user_id"
     >;

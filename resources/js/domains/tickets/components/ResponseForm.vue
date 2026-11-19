@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { Response } from "../store";
+import { Response } from "../../responses/store.ts";
 import FormError from "../../components/FormError.vue";
-
-//const responseText = ref("");
-
-// const props = defineProps<{
-//     response?: Response;
-// }>();
 
 const props = defineProps<{
     response?: Omit<Response, "id" | "created_at" | "updated_at">;

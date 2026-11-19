@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { resetPassword, readQueryString } from "../../../composables/useAuth";
+import { useAuth } from "../../../composables/useAuth.ts";
 import FormError from "../../components/FormError.vue";
 
 const route = useRoute();
 const router = useRouter();
+
+const { resetPassword } = useAuth();
+const { readQueryString } = useAuth();
 
 const email = ref(readQueryString(route.query.email));
 const token = ref(readQueryString(route.query.token));

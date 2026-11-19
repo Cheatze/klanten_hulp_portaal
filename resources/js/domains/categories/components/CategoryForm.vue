@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { fetchCategories, getAllCategories } from "../store";
 import ErrorMessage from "../..//components/ErrorMessage.vue";
 import FormError from "../../components/FormError.vue";
 

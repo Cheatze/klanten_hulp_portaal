@@ -12,16 +12,7 @@ class UpdateTicketRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        //$user = $request->user();
-        $user = $this->user();
-
-        if ($user->is_admin) {
-            return true;
-        } else if($user->id == $this->made_by){
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     /**

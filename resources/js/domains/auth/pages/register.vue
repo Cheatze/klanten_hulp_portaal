@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import FormError from "../../components/FormError.vue";
-import { useAuth } from "../../../composables/useAuth";
+import { useAuth } from "../../../composables/useAuth.ts";
 
 const router = useRouter();
 

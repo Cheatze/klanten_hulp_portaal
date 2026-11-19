@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { requestPasswordReset } from "../../../composables/useAuth";
+import { useAuth } from "../../../composables/useAuth.ts";
 import FormError from "../../components/FormError.vue";
 
 const email = ref("");
 const statusMessage = ref("");
 const loading = ref(false);
+const { requestPasswordReset } = useAuth();
 
 const submitResetRequest = async () => {
     loading.value = true;

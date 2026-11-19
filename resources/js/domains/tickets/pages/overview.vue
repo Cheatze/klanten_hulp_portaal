@@ -13,7 +13,9 @@ if (route.query.verified === "1") {
 }
 
 //fetchTickets();
-fetchTicketsByUser(user.value?.id);
+if (user.value?.id !== undefined) {
+    fetchTicketsByUser(user.value.id);
+}
 fetchUsers();
 fetchCategories();
 </script>

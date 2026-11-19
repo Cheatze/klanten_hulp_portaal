@@ -1,23 +1,22 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { fetchCategories, getCategoryById } from "../../categories/store";
+import { fetchById, getTicketById, patchTicket, formatDate } from "../store";
 import {
-    fetchById,
-    getTicketById,
-    patchTicket,
-    formatDate,
-    fetchResponses,
-    getAllResponses,
-    createResponse,
-    Response,
-    patchResponse,
     fetchNotes,
     getAllNotes,
     createNote,
     updateNote,
     deleteNote,
     Note,
-} from "../store";
+} from "../../notes/store.ts";
+import {
+    fetchResponses,
+    getAllResponses,
+    createResponse,
+    Response,
+    patchResponse,
+} from "../../responses/store.ts";
 import { fetchUsers, getUserById, getAllUsers } from "../../users/store";
 import { useRoute } from "vue-router";
 import { useAuth } from "../../../composables/useAuth";
@@ -451,7 +450,7 @@ const handleNoteSubmit = async (
                 </p>
             </div>
             <div class="mt-8">
-                <div v-if="user.is_admin" class="mb-6">
+                <div v-if="user?.is_admin" class="mb-6">
                     <h2 class="text-lg font-semibold text-gray-900">
                         Response form
                     </h2>
@@ -476,7 +475,7 @@ const handleNoteSubmit = async (
                         {{ getUserById(response.user_id).value?.last_name }}
                     </p>
                     <button
-                        v-if="user.is_admin"
+                        v-if="user?.is_admin"
                         @click="startEditResponse(response)"
                         class="mt-2 rounded-md bg-blue-600 px-3 py-1 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     >
@@ -488,7 +487,7 @@ const handleNoteSubmit = async (
                 </div>
             </div>
             <p v-else class="mt-4 text-sm text-gray-500">No responses yet.</p>
-            <div v-if="user.is_admin" class="mt-8">
+            <div v-if="user?.is_admin" class="mt-8">
                 <h2 class="text-lg font-semibold text-gray-900">Notes form</h2>
                 <NoteForm
                     :response="note"

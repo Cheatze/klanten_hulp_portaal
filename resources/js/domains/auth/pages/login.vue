@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { http } from "../../../services/http";
-import { useAuth } from "../../../composables/useAuth";
+import { http } from "../../../services/http/index.ts";
+import { useAuth } from "../../../composables/useAuth.ts";
 import ErrorMessage from "../../components/ErrorMessage.vue";
 import FormError from "../../components/FormError.vue";
 

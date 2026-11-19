@@ -12,13 +12,7 @@ class StoreNoteRequest extends BaseFormRequest
      */
     public function authorize(): bool
     {
-        $user = $this->user();
-
-        if ($user->is_admin) {
-            return true;
-        } else{
-            return false;
-        }
+        return true;
     }
 
     /**
